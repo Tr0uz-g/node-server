@@ -10,23 +10,48 @@ function interfas(){
     }
 }
 
-function add(){
-    const pregunta1 = readline.question(chalk.blue.italic('Ingrese tarea: '));
+const promesaAdd = new Promise((resolve, reject) => {
+    try {
+        const pregunta1 = readline.question(chalk.blue.italic('Ingrese tarea: '));
     list.push({pregunta1, completada: false});
     console.log(chalk.green.italic(`Se agrego tarea`));
+    resolve(list);
+} catch (error){
+    reject (error);
 }
+});
+
+promesaAdd 
+.then(list =>{
+    cosnole.log('!Tarea agrgada con exito¡');
+    console.log(list);
+})
+.catch(error =>{
+    console.log('Error al agragar la tarea', error)
+});
 
 function delete1(){
-    interfas();
+    return new Promise((resolve, reject)=> {
+        interfas();
     const index = readline.questionInt(chalk.cyan.italic('ingrese el numero de la tarea que desea eliminar --->  ')) -1;
     
     if (index >= 0 && index < list.length){
         list.splice(index, 1)
         console.log(chalk.green.italic('tarea eliminada... '));
+        resolve()
     }else{
-        cosnole.log(chalk.red.italic('nuemro no valido...'));
+        console.log(chalk.red.italic('nuemro no valido...'));
+        reject('nuemro no valido...')
     }
+    })
 }
+delete1()
+.then(()=>{
+    console.log('Tarea eliminada con éxito');
+})
+.catch(error => {
+    console.error('Error al eliminar la tarea:', error);
+  });
 
 function completarTarea(){
     
